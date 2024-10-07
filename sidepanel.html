@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Sidepanel</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Moving pastel background -->
+    <div class="background"></div>
+    
+    <div class="app-container">
+        <h1>YouTube Overlay</h1>
+        <form id="myForm">
+            <div class="input-group">
+                <input type="text" id="search" name="search" placeholder="Search" required>
+                <button type="submit" class="btn">Search</button>
+            </div>
+        </form>
+        <!-- Container for the videos -->
+        <div id="video-container"></div>
+    </div>
+
+    <!-- Link to the external JavaScript file -->
+    <script src="backend/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+{
+    "icons": {
+        "16": "images/icon.png",
+        "32": "images/icon.png",
+        "48": "images/icon.png",
+        "128": "images/icon.png"
+    },
+    "name": "Youtube sidebar",
+    "description": "Base Level Extension",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_icon": "images/icon.png",
+        "default_title": "Click to open panel"
+    },
+    "permissions": [
+        "contextMenus",
+        "sidePanel"
+    ],
+    "side_panel": {
+        "default_path": "sidepanel.html"
+    },
+    "background": {
+        "service_worker": "backend/service-worker.js"
+    }
+}
