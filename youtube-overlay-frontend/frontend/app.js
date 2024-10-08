@@ -21,6 +21,23 @@ async function Search(search) {
     return listOfLinks;
 
 }
+// Function to search for videos and return video IDs
+async function Search(search) {
+    try {
+        // Call your backend endpoint
+        const result = await fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(search)}`);
+        const r = await result.json();
+        
+        // Extract video IDs from the backend response
+        const e = r.items;
+        const listOfLinks = e.map(i => i.id.videoId);
+        return listOfLinks;
+    } catch (error) {
+        console.error('Error fetching search results:', error);
+        return [];
+    }
+}
+
 
 // Function to load videos into the container
 async function loadVideos(search) {
