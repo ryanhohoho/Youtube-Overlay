@@ -4,7 +4,7 @@
 const form = document.getElementById('myForm');
 
 form.addEventListener('submit', function(event) {
-    event.preventDefault();
+    event.preventDefault(); // Prevent the default form submission
     const searchVal = document.getElementById('search').value;
     loadVideos(searchVal);  // Load videos based on the search input
 });
@@ -12,25 +12,17 @@ form.addEventListener('submit', function(event) {
 
 // Function to search for videos and return video IDs
 async function Search(search) {
-  
-    const result =  await fetch(`https://www.googleapis.com/youtube/v3/search?key=${API-KEY}&q=${search}&type=video&part=snippet&maxResults=30`);
-
-    const r = await result.json(); 
-    const e = await r.items; 
-    const listOfLinks = e.map(i => i.id.videoId);
-    return listOfLinks;
-
-}
-// Function to search for videos and return video IDs
-async function Search(search) {
     try {
         // Call your backend endpoint
-        const result = await fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(search)}`);
+        const result = await fetch(`http://localhost:5001/api/search?q=${encodeURIComponent(search)}`);
         const r = await result.json();
-        
-        // Extract video IDs from the backend response
+
+        // Extract video IDs and create full URLs for embedding
         const e = r.items;
-        const listOfLinks = e.map(i => i.id.videoId);
+        const listOfLinks = e
+            .filter(i => i.id.kind === 'youtube#video') // Ensure it's a video
+            .map(i => `https://www.youtube.com/embed/${i.id.videoId}`); // Create full URL directly
+
         return listOfLinks;
     } catch (error) {
         console.error('Error fetching search results:', error);
@@ -39,32 +31,37 @@ async function Search(search) {
 }
 
 
+
 // Function to load videos into the container
 async function loadVideos(search) {
-    const videoIds = await Search(search);
-    let link = "https://www.youtube.com/embed/";
+    const videoLinks = await Search(search); // This will now return the full URLs
     let container = document.getElementById('video-container');
-    
+
     // Clear previous videos
     container.innerHTML = '';
 
-    // Loop through video IDs and append them
-    videoIds.forEach(videoId => {
-        // Create a currDiv element with the responsive container class
+    // Check if videoLinks array is empty
+    if (videoLinks.length === 0) {
+        container.innerHTML = '<p>No results found.</p>'; // Display a message if no results
+        return;
+    }
+
+    // Loop through video links and append them
+    videoLinks.forEach(link => {
         let currDiv = document.createElement('div');
         currDiv.className = 'responsive-iframe-container';
 
         let iframe = document.createElement('iframe');
-        iframe.src = link + videoId;
+        iframe.src = link; // Use the complete link returned by Search function
         iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
         iframe.allowFullscreen = true;
 
         // Create PiP button with .png image
         let pipButton = document.createElement('img');
-        pipButton.src = 'images/pip-icon.png';  // Set your PiP icon image path
+        pipButton.src = 'images/pip-icon.png';  // Ensure the path is correct
         pipButton.className = 'pip-button';
         pipButton.title = 'Enable PiP';
-        
+
         // Add event listener to activate PiP mode
         pipButton.addEventListener('click', function() {
             activatePiP(iframe);  // Activate PiP
@@ -75,6 +72,8 @@ async function loadVideos(search) {
         container.appendChild(currDiv);
     });
 }
+
+
 
 //dragging and picture in picture functionality below:
 
