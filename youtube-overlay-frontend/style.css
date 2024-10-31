@@ -217,3 +217,26 @@ h1 {
     padding: 10px;
     cursor: pointer;
 }
+
+.custom-video-container {
+    position: absolute;
+    margin-bottom: 20px; /* Adding spacing between videos */
+    cursor: grab;
+    background: rgba(0, 0, 0, 0.1); /* Add a slight background to distinguish different videos */
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 10; /* Ensure video container is draggable even when clicking on the video */
+}
+
+.custom-video-container:active {
+    cursor: grabbing;
+}
+
+.custom-video {
+    width: 100%;
+    height: auto;
+    border: none;
+    outline: none;
+    z-index: 5; /* Lower z-index to ensure container is prioritized for dragging */
+    pointer-events: auto; /* Allow dragging even when clicking directly on the video */
+}
